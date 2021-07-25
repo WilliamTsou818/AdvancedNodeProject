@@ -37,7 +37,8 @@
     "passport-google-oauth20": "^2.0.0",
     "path-parser": "^4.2.0",
     "redis": "^2.8.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "concurrently": "^4.1.1",
