@@ -16,6 +16,7 @@ mongoose.Query.prototype.cache = function (options = {}) {
 }
 
 mongoose.Query.prototype.exec = async function () {
+  // check if the query is about to use cache 
   if (!this.useCache) {
     return exec.apply(this, arguments)
   }
@@ -27,13 +28,15 @@ mongoose.Query.prototype.exec = async function () {
   // see if we have a value for 'key' in redis
   const cacheValue = await client.hget(this.hashKey, key)
   
+  // deal with cache value
   if (cacheValue) {
     const doc = JSON.parse(cacheValue)
     return Array.isArray(doc) 
     ? doc.map(d => new this.model(d))
     : new this.model(doc)
   }
-
+  
+  // set data to cache value 
   const result = await exec.apply(this, arguments)
   client.hmset(this.hashKey, key, JSON.stringify(result), 'EX', 10)
   return result
