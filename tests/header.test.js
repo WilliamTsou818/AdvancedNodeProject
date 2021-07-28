@@ -1,5 +1,8 @@
 const puppeteer = require('puppeteer')
 require('dotenv').config()
+const sessionFactory = require('./factories/sessionFactory')
+const userFactory = require('./factories/userFactory')
+const mongoose = require('mongoose')
 
 let browser, page
 
@@ -12,7 +15,11 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  // await browser.close()
+  await browser.close()
+})
+
+afterAll(() => {
+  return mongoose.disconnect()
 })
 
 test('the header has the correct text', async () => {
@@ -26,21 +33,16 @@ test('clicking login starts oauth flow', async () => {
   expect(url).toMatch(/accounts\.google\.com/)
 })
 
-test.only('When signed in, shows logout button', async () => {
-  const id = process.env.SESSION_USER_ID
-  const Buffer = require('safe-buffer').Buffer
-  const sessionObject = {
-    passport: { user: id }
-  }
-  const sessionString = Buffer.from(JSON.stringify(sessionObject)).toString('base64')
-  
-  // generate fake session
-  const Keygrip = require('keygrip')
-  const keys = process.env.COOKIE_KEY
-  const keygrip = new Keygrip([keys])
-  const sig = keygrip.sign('express:sess=' + sessionString)
+test('When signed in, shows logout button', async () => {
+  const user = await userFactory()
+  const { session, sig } = sessionFactory(user)
   // set session to cookie
-  await page.setCookie({ name: 'express:sess', value: sessionString })
+  await page.setCookie({ name: 'express:sess', value: session })
   await page.setCookie({ name: 'express:sess.sig', value: sig })
   await page.goto('localhost:3000')
+
+  await page.waitFor('a[href="/auth/logout"]')
+
+  const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML)
+  expect(text).toEqual('Logout')
 })
