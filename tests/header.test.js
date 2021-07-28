@@ -1,21 +1,18 @@
-const puppeteer = require('puppeteer')
 require('dotenv').config()
 const sessionFactory = require('./factories/sessionFactory')
 const userFactory = require('./factories/userFactory')
 const mongoose = require('mongoose')
+const Page = require('./helpers/page')
 
-let browser, page
+let page
 
 beforeEach(async () => {
-  browser = await puppeteer.launch({
-    headless: false
-  })
-  page = await browser.newPage()
+  page = await Page.build()
   await page.goto('localhost:3000')
 })
 
 afterEach(async () => {
-  await browser.close()
+  await page.close()
 })
 
 afterAll(() => {
