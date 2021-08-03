@@ -6,14 +6,8 @@ const mongoose = require('mongoose')
 const cookieSession = require('cookie-session')
 const passport = require('passport')
 const bodyParser = require('body-parser')
+const { mongoURI, cookieKey } = require('@config/keys')
 const path = require('path')
-
-if (process.env.NODE_ENV !== 'ci') {
-  const { mongoURI, cookieKey } = require('@config/keys')
-} else {
-  const { mongoURI, cookieKey } = require('@config/ci')
-}
-
 
 // DB and Passport
 require('@models/User')

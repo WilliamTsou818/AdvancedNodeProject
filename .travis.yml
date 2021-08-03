@@ -18,4 +18,4 @@ install:
 script:
   - nohup yarn start &
   - sleep 3
-  - npm run test
+  - yarn test
