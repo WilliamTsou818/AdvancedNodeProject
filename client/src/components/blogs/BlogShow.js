@@ -10,6 +10,12 @@ class BlogShow extends Component {
     dispatch(fetchBlog(match.params._id))
   }
 
+  renderImage() {
+    if (this.props.blog.imageUrl) {
+      return <img src={'https://my-blog-project-bucket-2021.s3.ap-northeast-1.amazonaws.com/' + this.props.blog.imageUrl} style={{ maxWidth: '1000px', maxHeight: '600px' }} alt="blog-main-pic"/>
+    }
+  }
+
   render () {
     const { blog } = this.props
     
@@ -20,6 +26,7 @@ class BlogShow extends Component {
       <>
         <h3>{title}</h3>
         <p>{content}</p>
+        {this.renderImage()}
       </>
     )
   }
