@@ -29,7 +29,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.188.0",
+    "aws-sdk": "^2.960.0",
     "body-parser": "^1.19.0",
     "cookie-session": "^1.3.3",
     "dotenv": "^8.0.0",

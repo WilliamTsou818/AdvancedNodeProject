@@ -18,6 +18,7 @@ require('@services/cache')
 // Routes
 const setupAuthRoutes = require('@routes/authRoutes')
 const setupBlogRoutes = require('@routes/blogRoutes')
+const setupUploadRoutes = require('@routes/uploadRoutes')
 
 // Server and DB Settings
 const PORT = process.env.PORT || 5000
@@ -37,6 +38,7 @@ app.use(passport.session())
 // Server Routes
 setupAuthRoutes(app)
 setupBlogRoutes(app)
+setupUploadRoutes(app)
 
 // Production-only settings
 if (['production', 'ci'].includes(process.env.NODE_ENV)) {
