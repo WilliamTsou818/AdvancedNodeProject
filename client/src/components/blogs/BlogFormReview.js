@@ -44,8 +44,8 @@ class BlogFormReview extends Component {
     dispatch(submitBlog(formValues, this.state.file, history))
   }
 
-  onFileChange(event) {
-    this.setState({ file: event.target.files[0] })
+  onFileChange(e) {
+    this.setState({ file: e.target.files[0] })
   }
 
   render() {

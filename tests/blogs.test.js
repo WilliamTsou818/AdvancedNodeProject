@@ -24,7 +24,7 @@ test('When logged in, can see blog create form', async () => {
   expect(label).toEqual('Blog Title')
 })
 
-describe('When logged in', async () => {
+describe('When logged in', () => {
   beforeEach(async () => {
     await page.login()
     await page.click('a.btn-floating')
@@ -36,7 +36,7 @@ describe('When logged in', async () => {
     expect(label).toEqual('Blog Title')
   })
 
-  describe('And using valid inputs', async () => {
+  describe('And using valid inputs', () => {
     beforeEach(async () => {
       await page.type('.title input', 'My Test Title')
       await page.type('.content input', 'My Test Content')
@@ -44,6 +44,7 @@ describe('When logged in', async () => {
     })
 
     test('Submitting takes user to review screen', async () => {
+      await page.waitFor('h5')
       const text = await page.getContentsOf('h5')
 
       expect(text).toEqual('Please confirm your entries')
@@ -61,9 +62,11 @@ describe('When logged in', async () => {
     })
   })
 
-  describe('And using invalid inputs', async () => {
+  describe('And using invalid inputs', () => {
     beforeEach(async () => {
       await page.click('form button')
+      await page.waitFor('.title .red-text')
+      await page.waitFor('.content .red-text')
     })
 
     test('the form shows an error message', async () => {
@@ -76,10 +79,10 @@ describe('When logged in', async () => {
   })
 })
 
-describe('User is not logged in', async () => {
+describe('User is not logged in', () => {
   test('User cannot create blog posts', async () => {
     const result = await page.post('/api/blogs', { title: 'T', content: 'C' })
-
+    
     expect(result).toEqual({ error: 'Login required' })
   })
 
