@@ -4,8 +4,12 @@ const authenticate = require('@middleware/authenticate')
 require('dotenv').config()
 
 const s3 = new AWS.S3({
-  accessKeyId: process.env.ACCESSKEY_ID,
-  secretAccessKey: process.env.ACCESSKEY_SECRET
+  credentials: {
+    accessKeyId: process.env.ACCESSKEY_ID,
+    secretAccessKey: process.env.ACCESSKEY_SECRET
+  },
+  signatureVersion: 'v4',
+  region: 'ap-northeast-1',
 })
 
 module.exports = app => {
@@ -14,7 +18,7 @@ module.exports = app => {
 
     s3.getSignedUrl('putObject', {
       Bucket: 'my-blog-project-bucket-2021',
-      ContentType: 'jpeg',
+      ContentType: 'image/jpeg',
       Key: key
     }, (err, url) => res.send({ key, url }))
   })
